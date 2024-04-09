@@ -35,7 +35,8 @@
 #include "mysqlConnect.h"
 //#include "clientServer.h"
 #include "doubleThread.h"
-#include "strText.h"
+#include "strText.h"//algorithm¿â
+#include "container.h"//ÈÝÆ÷¿â
 using namespace std;
 namespace fs = boost::filesystem;
 
@@ -53,9 +54,6 @@ int main(int argc, char* argv[]) {
 	//Ñ§Ï°ÆÁÄ»½ØÆÁ¡£×öÔ¶³Ì¿ØÖÆ
 	/*SocketApi getWindowImage;
 	getWindowImage.createThreadSocket();*/
-
-	StrText strtext;
-	strtext.startStrText();
-
+	container createContain;
 	return 0;
 }

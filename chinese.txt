@@ -1,0 +1,465 @@
+E:/work/Data/UI/DigitalSim/src/pages/components/AllPrediction/index.js
+14                    title: '名称',
+18                    title: '开始时间',
+23                    title: '故障',
+26                        return(<div>故障{item?.faultNum || 0}条</div>)
+30                    title: '报警',
+33                        return(<div>报警{item?.alarmNum || 0}条</div>)
+37                    title: '指标',
+41                    title: '操作',
+44                        return <span style={{color: '#4797FF', cursor: 'pointer'}} onClick={()=>{this.openDetail(item)}}>查看详情</span>
+169                    排序值：<Select value={sortName} onChange={this.sortNameChange} style={{width: '100px', marginRight: '20px'}}>
+171                            名称
+174                            时间
+177                    排序方式：<Select value={sortType} onChange={this.sortTypeChange} style={{width: '100px', marginRight: '20px'}}>
+179                            升序
+182                            降序
+186                    <Button type="primary" onClick={()=>{this.searchPrediction()}}>搜索</Button>
+198                                showTotal={total=>`共${total}条`}
+E:/work/Data/UI/DigitalSim/src/pages/components/DataSetting/index.js
+27                    title:'工程配置',
+28                    description:'第一步工程配置',
+32                    title:'同步位号配置',
+33                    description:'第二步同步位号配置',
+42                    title:'监测位号配置',
+43                    description:'第三步监测位号配置',
+47                    title:'趋势位号配置',
+48                    description:'第四步趋势位号配置',
+52                    title:'应用中心配置',
+53                    description:'第五步应用中心配置',
+57                    title:'参数配置',
+58                    description:'第六步参数配置',
+118                <TabPane tab="数据站设置" key="ip">
+122                <TabPane tab="工程配置" key="project">
+124                <TabPane tab="同步位号配置" key="synchronize">
+128                <TabPane tab="监测位号配置" key="monitor">
+130                <TabPane tab="趋势位号配置" key="trend">
+132                <TabPane tab="应用中心配置" key="render">
+134                <TabPane tab="参数配置" key="param">
+E:/work/Data/UI/DigitalSim/src/pages/components/DataSetting/IPSetting.js
+33                title: "提示",
+35                content: "经检测，服务器地址未发生变更，是否仍然重启应用?",
+36                okText: "重启",
+37                cancelText: "取消",
+87                ipHelp: "地址不合法"
+109                    message={`重要提示`} 
+110                    description={`您当前的服务器地址为：${serverAddress} ,切换服务器地址，应用将会重新启动`} 
+118                    <Form.Item label="服务器地址" validateStatus = {ipValidateStatus}  help={ipHelp}>
+126                <Button type="primary" onClick={this.handleOK} disabled={this.props.project.enginueState == 'Running'}>重启应用</Button>
+E:/work/Data/UI/DigitalSim/src/pages/components/DataSetting/ParamSetting.js
+133            Message.success("设置成功")
+152                ipHelp: "地址不合法"
+225          return Promise.reject('请输入数字')
+258                      label="同步周期(s)"
+267                        placeholder="请输入同步周期"
+272                    <Form.Item label="是否自动预测" name="isAutoPrediction" style={{ marginLeft: '26px' }}>
+279                      <Form.Item label="仿真倍速" name="predictionSpeed" style={{ marginLeft: '42px' }} rules={[{ validator: (_, value) => this.validNumber(_, value) }, { required: true }]}>
+282                      <Form.Item label={"预测事件"} name={'autoPredicationName'} style={{ marginLeft: '42px' }} rules={[ { required: true }]}>
+285                      <Form.Item label={"预测间隔（分）"} name={'autoPredicationStep'}  rules={[{ validator: (_, value) => this.validNumber(_, value) }, { required: true }]}>
+288                      <Form.Item label={"预测轮次（分）"} name={'autoPredicationTime'}  rules={[{ validator: (_, value) => this.validNumber(_, value) }, { required: true }]}>
+291                      <Form.Item label={"预测类型"} name={'autoPredictionParam'} rules={[ { required: true }]} style={{ marginLeft: '42px' }}>
+294                              <Option value="0">报警</Option>
+295                              <Option value="1">故障</Option>
+305                  <Form.Item label="自动保存" name="autoSave" style={{ marginLeft: '55px' }}>
+310                    <Form.Item label="保存间隔" name="saveTime" style={{ marginLeft: '55px' }}  rules={[{ validator: (_, value) => this.validNumber(_, value) }, { required: true }]}>
+323                    上一步
+325                <Button type="primary" onClick={this.handleOK}>保存</Button>
+E:/work/Data/UI/DigitalSim/src/pages/components/DataSetting/ProjectSetting.js
+26              name:'仿真服务器'
+32                name:'仿真服务器'
+48                    rules={[{ validator: (_, value) => this.validIp(_, value) }, { required: true,message:'必填项！' }]}>
+54                title:'控制域',
+59                                      rules={[{required:true,message:'必填项！'}]}>
+65                title:'控制站',
+70                                      rules={[{required:true,message:'必填项！'}]}>
+93                rules={[{ validator: (_, value) => this.validIp(_, value) }, { required: true,message:'必填项！' }]}>
+99              title:'控制域',
+105                                    rules={[{required:true,message:'必填项！'}]}>
+111              title:'控制站',
+117                                    rules={[{required:true,message:'必填项！'}]}>
+168                    name: item.Name || '仿真服务器'
+176                    clickServerName: item.Name || '仿真服务器'
+178                  trainItem[`TrainServer_Name_${key}`] = item.Name || '仿真服务器'
+207                  trainItem[`TrainServer_Name_${key}`] = '仿真服务器'
+369              Message.success("设置成功")
+396        name:'仿真服务器'
+407        [key]: '仿真服务器'
+415        title: '确认删除',
+416        content: '确定要删除吗？',
+417        okText: '确认',
+418        cancelText: '取消',
+482            message.warning('最大为20条数据！')
+493            message.warning('最大为20条数据！')
+518    let reg =  /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/   
+525        return Promise.reject("请输入正确IP格式！")
+557      const csv = JSONtoCSV(data,['IP','控制域','控制站'])
+585            if(fileString.indexOf('�') >-1) { 
+595              '控制域': 'area',
+596              '控制站': 'control',
+606            Message.info("上传成功!");
+610            Message.error("上传失败!")
+617  title:"导入",
+621              下载模板
+626              选择文件
+637          delete newItem['控制域']
+638          delete newItem['控制站']
+646          message.warning('不可大于二十条！')
+656          delete newItem['控制域']
+657          delete newItem['控制站']
+663          message.warning('不可大于二十条！')
+683        Message.error('地址为空!')
+705            'area': '控制域',
+706            'control': '控制站',
+722        let csv = JSONtoCSV(list,['IP','控制域','控制站'])
+751                  数据配置
+754                  <Form.Item label={this.labelCom('DCS工程')} name="DCSProject"  rules={[{required:true,message:'必填项！'}]} labelCol={{span: 12}} className={styles.comuItem}>
+757                  <Form.Item label={this.labelCom('DCS用户名')} name="DCSUser" labelCol={{span: 12}} rules={[{required:true,message:'必填项！'}]} className={styles.comuItem}>
+760                  <Form.Item label={this.labelCom('DCS密码')} name="DCSPassword" labelCol={{span: 12}} className={styles.comuItem}>
+765                  <Form.Item label={this.labelCom("目标DCS IP")} name="DCSTargetIP"  labelCol={{span: 12}} className={styles.comuItem}
+766                  rules={[{ validator: (_, value) => this.validIp(_, value) }, { required: true,message:'必填项！' }]}
+772                    label={this.labelCom("目标DCS端口")}
+774                    rules={[{required:true,message:'必填项！'}]}
+778                  <Form.Item label={this.labelCom('OTS工程')} name="OTSProject" labelCol={{span: 12}} rules={[{required:true,message:'必填项！'}]} className={styles.comuItem}>
+795                  跟随服务器配置
+799                    rules={[{ validator: (_, value) => this.validIp(_, value) }, { required: true,message:'必填项！' }]}>
+802                  <Form.Item label={this.labelCom('端口')} name="FollowServer_Port" rules={[{required:true,message:'必填项！'}]} className={styles.comuItem} labelCol={{span: 12}}>
+805                  <Form.Item label={this.labelCom('对点组态文件')} name="FollowServer_DataCommuFilePath" labelCol={{span: 12}} rules={[{required:true,message:'必填项！'}]} className={styles.comuItem}>
+820                            新增
+823                          导入
+826                          导出
+E:/work/Data/UI/DigitalSim/src/pages/components/DataSetting/RemoteControl.js
+42            name: '监控启动软件',
+46            name: '模型组态',
+52            title: '软件名称',
+71                                    <Button onClick={addSelectOption}>新增</Button>
+76                    <div onDoubleClick={()=>{updateItem(val.id, '_processName')}} title="双击修改"
+81            title: '软件图片',
+88            title: '软件地址',
+101            title: '操作',
+105                        <Button onClick={()=>{deleteTabItem(val)}} type="default" size="small" danger>删除</Button>
+114            label: '跟随服务器',
+118            label: '仿真服务器',
+122            label: '同步服务器',
+201                    if(item.name == '跟随服务器'){
+203                    }else if(item.name == '目标DCS服务器'){
+370                message.warning('请先配置仿真服务器！');
+401            message.info('请勾选列表！')
+477                         style={{backgroundColor: '#4797FF'}}>新增</Button>
+478                    <Button onClick={()=>{deleteServerSet(tabKey)}} type="default" size="small" danger>删除</Button>
+497                                showTotal={total=>`共${total}条`}
+528                                        showTotal={total=>`共${total}条`}
+555                                showTotal={total=>`共${total}条`}
+E:/work/Data/UI/DigitalSim/src/pages/components/DataSetting/SimSetting.js
+53            Message.warning("未选择训练服务器的IP")
+64                Message.warning("训练服务器状态异常，请选择正确的服务器")
+72        Message.success("设置成功")
+80                    <Form.Item label="模式">
+82                            <Radio.Button value="random">随机</Radio.Button>
+83                            <Radio.Button value="fixIp">指定服务器</Radio.Button>
+86                    <Form.Item label="服务器地址">
+94                                                &nbsp;{_s.state === "1" ? "正常" : "异常"}
+106                <Button type="primary" onClick={this.handleOK}>确定</Button>
+E:/work/Data/UI/DigitalSim/src/pages/components/DataSetting/TagsSetting.js
+72                title:'位号名称',
+92                              rules={[{ required: true, message: '必填内容！' }]}
+111                title:'加入时间',
+1011                      新增
+1017                      导入
+1020                      导出
+1030                      删除
+1115                  title="确认删除"
+1121                  是否确认删除？
+E:/work/Data/UI/DigitalSim/src/pages/components/Detection/index.js
+75            title: '位号名称',
+83            title: '目标值',
+91            title: '目标时间',
+96            title: '仿真值',
+104            title: '仿真时间',
+109            title: '偏差值（%）',
+196            message.info("请先勾选位号！")
+238                loadContent: '请求中'
+408                    <Button type='primary' size='small' onClick={openTrendModal}>趋势详情</Button>
+410                排序值：<Select value={sortName} onChange={sortNameChange} style={{width: '100px', marginRight: '20px'}}>
+412                        位号名称
+415                        偏差值
+418                排序方式：<Select value={sortType} onChange={sortTypeChange} style={{width: '100px', marginRight: '20px'}}>
+420                        升序
+423                        降序
+427                <Button onClick={searchSord} type='primary'>搜索</Button>
+443                            showTotal={total=>`共${total}条`}
+453            <DragableModal transitionName=""  width={'80vw'} mask={true} className={'detectionTrendModal'} destroyOnClose={true} title="检测偏差图" 
+E:/work/Data/UI/DigitalSim/src/pages/components/DeviceAttr/index.js
+13        console.log("插件的属性设置: ------------------", this.props)
+E:/work/Data/UI/DigitalSim/src/pages/components/FacePlate/faceContent/index.js
+31            title: '序号',
+36            title: '位号',
+44            title: '类型',
+52            title: '描述',
+60            title: '数值',
+68            title: '单位',
+73            title: '操作',
+78                        <Button type="primary" size="small" disabled={!faceKey} onClick={()=>{openChangeDevice(item, index)}} style={{marginRight: '5px', backgroundColor: '#4797FF'}}>管理</Button>
+79                        <Button type="default" size="small" disabled={!faceKey} danger onClick={()=>{deleteDevice(item, index)}}>清除</Button>
+131                    item.type = list.length == 2?list[0]:'指标'
+204                            message.info('请选择位号！')
+208                            message.info('请选择指标！')
+285            <DragableModal transitionName=""  width={800} className={'TagsPanelUI'} destroyOnClose={true} title="配置" visible={tableVisible}  onOk= {confirmTags} onCancel={closeTags} maskClosable={false} >
+289                        <TabPane tab={'位号选择器'} key={'1'}>
+295                        <TabPane tab={'指标选择器'} key={'2'}>
+E:/work/Data/UI/DigitalSim/src/pages/components/FacePlate/index.js
+63        API.addPanel({name: '面板'+viewList.length}).then(res=>{
+153            message.info('请勾选面板！')
+157            title: '确认删除',
+158            content: '你确定要删除选中的面板和所有面板位号配置吗?',
+165                        message.success('删除成功')
+180                <Search placeholder="请输入" onSearch={searchFacePlate}/>
+182                    <Button type="primary" style={{marginRight: '5px'}} size="small" onClick={addView}>新增</Button>
+183                    <Button type="primary" danger size="small" onClick={deleteFacePlage}>删除</Button>
+E:/work/Data/UI/DigitalSim/src/pages/components/facePlateView/index.js
+187                <Search placeholder="请输入" onSearch={searchFacePlate}/>
+E:/work/Data/UI/DigitalSim/src/pages/components/FaultDefinition/index.js
+51        title: '故障名称',
+64                    rules={[{ required: true, message: '必填内容！' }]}
+95        title: '创建时间',
+101        title: '描述',
+147        title: '操作',
+154              设计
+264      name: '故障' + this.state.data.length,
+424              添加
+432              删除
+440              下发故障
+446              placeholder="请输入名称"
+450              搜索
+485                  showTotal={(total)=>{ return `共${total}条`}}
+E:/work/Data/UI/DigitalSim/src/pages/components/historyRootPrediction/index.js
+15                    title: '名称',
+19                    title: '开始时间',
+23                    title: '故障',
+26                        return(<div>故障{item.fault}条</div>)
+30                    title: '报警',
+33                        return(<div>报警{item.alarm}条</div>)
+37                    title: '指标',
+41                    title: '操作',
+44                        return <Button type="primary" onClick={()=>{this.openDetail(item.data)}}>详情</Button>
+146                    <Button type="primary" onClick={this.searchPrediction}>搜索</Button>
+155                                showTotal={total=>`共${total}条`}
+165                <DragableModal transitionName=""  width={1000} mask={false} className={'PredictionDetail'} destroyOnClose={true} title="根因预测详情" visible={preDetailVisible} onCancel={this.onCancelModal}  closeBtn={true} maskClosable={false}>
+E:/work/Data/UI/DigitalSim/src/pages/components/hocCom.js
+E:/work/Data/UI/DigitalSim/src/pages/components/homeLogo/index.js
+8                <div style={{textAlign: 'center', height: '40px', lineHeight: '50px', fontSize: '20px', fontWeight: 800}}>数字孪生平台</div>
+9                <div style={{textAlign: 'center', height: '30px', lineHeight: '30px', fontSize: '10px', fontWeight: 400}}>让工业更智能，让生活更轻松</div>
+14                    <div style={{height: '40px', lineHeight: "40px", fontSize: '16px', fontWeight: 800}}>数字孪生介绍</div>
+16                        坚持自主创新，聚焦流程工业自动化、数字化、智能化需求，面向工业3.0+工业4.0全力构建“135 客户价值创新模式”，以 5T 技术为支撑，着力打造新一代全流程智能运行管理与控制系统（OMC），助力客户实现“安全生产、节能降耗、提高质量、降本增效、绿色环保”的发展目标。
+E:/work/Data/UI/DigitalSim/src/pages/components/ImportPage/Config.js
+7            text:"导入全流程组态",
+8            desc: "导入全流程组态并打开文件",
+12            text:"导入第三方组态",
+13            desc: "把第三方组态转为中控全流程组态",
+E:/work/Data/UI/DigitalSim/src/pages/components/ImportPage/index.js
+28                        title: "流程图"
+39            <p className={styles.p}>导入</p>
+E:/work/Data/UI/DigitalSim/src/pages/components/MalfunctionBoard/index.js
+42      id:'流程图1',
+E:/work/Data/UI/DigitalSim/src/pages/components/New/index copy.js
+26                title: "新建工程",
+27                desc: "新添加一个新的工厂。这里是工厂的一些简介什么的。需要设置一些属性和配置什么的",
+54                Message.success("保存失败，请重试")
+61        const msgHide = Message.loading("正在新建项目...", 0)
+63             console.error("新建项目结束")
+107        <DragableModal transitionName=""  destroyOnClose={true} title="新建工程" visible={attrVisible}  onOk = {(e)=>this.confirmModal(e)} onCancel={this.closeSetAttr} maskClosable={false} {...modalSet }>
+E:/work/Data/UI/DigitalSim/src/pages/components/NumberCustom/index.js
+34            modalTitle: '提示',
+214                modalTitle: '添加指标'
+219                modalTitle: '添加目录'
+235            { label: '删除目录', key: '1', },{ label: '重命名', key: '2', },{ label: '添加指标', key: 'addChild', },{ label: '添加目录', key: 'addMenu', },
+240            { label: '删除指标', key: '1', },{ label: '重命名', key: '2', },
+326            message.warning('名称不可为空！')
+350            message.warning("该指标名称已存在！")
+E:/work/Data/UI/DigitalSim/src/pages/components/ObjectFunc/index.js
+7                目标函数
+E:/work/Data/UI/DigitalSim/src/pages/components/Options/Default.js
+36            <Divider>设置默认文本</Divider>
+39                    <Radio value={true}>使用默认字体</Radio>
+40                    <Radio value={false}>使用自定义字体</Radio>
+45                    <Option value="a">宋体</Option>
+57            <Divider>设置默认连接线</Divider>
+60                    <Radio value={true}>使用默认连接线样式</Radio>
+61                    <Radio value={false}>使用自定义连接线样式</Radio>
+67                        <Form.Item label="线条宽度">
+70                        <Form.Item label="箭头样式" >
+80                        <Form.Item label="箭头大小">
+82                                <Option>小</Option>
+83                                <Option>大</Option>
+88                        <Form.Item label="线条样式">
+93                                <Option value="b">大</Option>
+96                        <Form.Item label="圆角大小">
+103            <Divider>设置默认页面尺寸</Divider>
+106                    <Radio value={true}>使用默认页面尺寸</Radio>
+107                    <Radio value={false}>使用自定义页面尺寸</Radio>
+113                        <p><CopyOutlined />A4 sheet, 210毫米x297毫米</p>
+117            <Divider>其他配置</Divider>
+E:/work/Data/UI/DigitalSim/src/pages/components/Options/GlobalSetCom.js
+8            temperatureUnit:['K','°C','°F'],
+68        return Promise.reject(new Error('闪蒸温度下限必须小于闪蒸温度上限'))
+75        return Promise.reject(new Error('闪蒸温度上限必须大于闪蒸温度下限'))
+81        return Promise.reject(new Error('闪蒸压力上限必须大于闪蒸压力下限'))
+87        return Promise.reject(new Error('闪蒸压力下限必须小于闪蒸压力上限'))
+100                    <Form.Item label="指定环境温度" >
+106                                rules={[{ required: true,message:"请输入一个值" }]}
+121                    <Form.Item label="指定大气压力">
+127                                rules={[{ required: true,message:"请输入一个值" }]}
+140                    <Form.Item label="允许模型相态">
+145                                value="气相"
+150                                气相
+155                                value="液相"
+160                                液相
+165                                value="固相"
+170                                固相
+179                                value="是否含自由水"
+185                                是否含自由水
+191                        <Form.Item label="闪蒸温度上限">
+197                                rules={[{ required: true ,message:"请输入一个值"},{validator: this.checkTempCeil }]}
+219                        <Form.Item label="闪蒸温度下限">
+225                                rules={[{ required: true ,message:"请输入一个值"},{validator: this.checkTempFloor }]}
+242                        <Form.Item label="闪蒸压力上限">
+248                                rules={[{ required: true ,message:"请输入一个值"},{validator: this.checkPressCeil}]}
+264                        <Form.Item label="闪蒸压力下限">
+270                                rules={[{ required: true,message:"请输入一个值" },{validator: this.checkPressFloor}]}
+286                    <Form.Item label="初始化闪蒸方法">
+296                    <Form.Item label="状态方程外推阈值">
+302                                rules={[{ required: true ,message:"请输入一个值"}]}
+310                        <Button type="primary" htmlType='submit'>保存</Button>
+E:/work/Data/UI/DigitalSim/src/pages/components/Options/Grid.js
+17                <Checkbox>根据标尺自动计算</Checkbox>
+19            <Form.Item label="网络水平间距">
+22            <Form.Item label="网络水平细分">
+25            <Form.Item label="网络垂直间距">
+28            <Form.Item label="网络垂直细分">
+31            <Form.Item label="网络横向页边距">
+34            <Form.Item label="网络纵向页边距">
+E:/work/Data/UI/DigitalSim/src/pages/components/Options/index.js
+21                <TabPane tab="常规"  key="1">
+26                <TabPane tab="网格"  key="2">
+31                <TabPane tab="默认设置"  key="3">
+36                <TabPane tab="全局设置"  key="4">
+41                <TabPane tab="语言"  key="5">
+E:/work/Data/UI/DigitalSim/src/pages/components/Options/Language.js
+16            <Form.Item label="界面语言">
+18                        <Option value="zh">简体中文</Option>
+E:/work/Data/UI/DigitalSim/src/pages/components/Options/Put.js
+12          dataZFlist:["组分包1","组分包2"],
+41          console.log('文件类型不正确');
+51            <Button>选择文件</Button>
+55              <TabPane tab="组分列表配置"  key="1">
+59                      <div style={{ "background":"#fff", "height":"30px","textAlign":"center","verticalAlign":"middle"}}>组分列表</div>
+66                      <Button>修改</Button><br/>
+67                      <Button>添加</Button><br/>
+68                      <Button>删除</Button><br/>
+69                      <Button>副本</Button><br/>
+74              <TabPane tab="热力学模型配置"  key="2">
+78                      <div style={{ "background":"#fff", "height":"30px","textAlign":"center","verticalAlign":"middle"}}>流体列表</div>
+85                      <Button>修改</Button><br/>
+86                      <Button>添加</Button><br/>
+87                      <Button>删除</Button><br/>
+88                      <Button>副本</Button><br/>
+E:/work/Data/UI/DigitalSim/src/pages/components/Options/Routine.js
+16            <Form.Item label="撤销次数">
+19            <Form.Item label="最近所用文件列表">
+22            <Form.Item label="最近所用模板列表">
+25            <Form.Item label="默认日期时间格式">
+E:/work/Data/UI/DigitalSim/src/pages/components/PredictionAccuracy/index.js
+60            title: '序号',
+68            title: '位号名称',
+74            title: '类型',
+77                return (<div style={{color: item?.color, whiteSpace:'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '100%'}}>{item?.type || '仿真' }</div>)
+81            title: '加入时间',
+89            title: '高限',
+96            title: '低限',
+104            title: '时间',
+109            title: '位号名称',
+114            title: '报警限',
+119            title: '报警值',
+208                loadContent: '请求中'
+469            message.info('请勾选位号')
+533                    <div className='detailLeftTitle'>位号趋势</div>
+546                            <Button type='default' danger size='small' style={{height: '30px'}} onClick={deleteDeviceList}>删除</Button>
+547                            <Button type='primary' style={{backgroundColor: '#4797FF', height: '30px'}} size='small' onClick={openDeviceModal}>添加位号</Button>
+548                            <Select style={{width: '120px'}} showSearch onSearch={selectSearch} onChange={onChangeDevice} placeholder="请选择预测">
+564                <div className='accAlarmTitle'>预测报警</div>
+565                <div className='accAlarmTitle'>DCS真实报警</div>
+573            <DragableModal transitionName=""  width={800} mask={true} className={'predictionDeviceModal'} destroyOnClose={true} title="添加位号" 
+E:/work/Data/UI/DigitalSim/src/pages/components/PredictionDetail/index.js
+35            title: '时间',
+40            title: '位号名称',
+45            title: '报警限',
+50            title: '报警值',
+57            title: '序号',
+65            title: '位号名称',
+71            title: '加入时间',
+79            title: '高限',
+86            title: '低限',
+425            message.info('请勾选位号')
+465                    <div className='detailLeftTitle'>位号未来趋势</div>
+478                            <Button type='default' danger size='small' onClick={deleteDeviceList} disabled={isReadonly}>删除</Button>
+479                            <Button type='primary' style={{backgroundColor: '#4797FF'}} size='small' onClick={openDeviceModal} disabled={isReadonly}>添加位号</Button>
+487                <div className='detailLeftTitle'>报警信息</div>
+491                <div className='detailLeftTitle'>故障信息</div>
+506            <DragableModal transitionName=""  width={800} mask={true} className={'predictionDeviceModal'} destroyOnClose={true} title="添加位号" 
+E:/work/Data/UI/DigitalSim/src/pages/components/PredictionDetail/SelectDevice.js
+10            title: '加入时间',
+15            title: '位号名称',
+20            title: '高限',
+24            title: '低限',
+108            <Button onClick={queryDevice} size="small" type='primary'>搜索</Button>
+117                        showTotal={total=>`共${total}条`}
+E:/work/Data/UI/DigitalSim/src/pages/components/predictionHistory/index.js
+11                    title: '名称',
+15                    title: '开始时间',
+19                    title: '趋势',
+22                        return <span style={{color: '#4797FF', cursor: 'pointer'}} onClick={()=>{this.openTrend(item)}}>查看详情</span>
+26                    title: '故障',
+29                        return(<div>故障{item?.faultNum || 0}条</div>)
+33                    title: '报警',
+36                        return(<div>报警{item?.alarmNum || 0}条</div>)
+40                    title: '指标',
+44                    title: '操作',
+47                        return <span style={{color: '#4797FF', cursor: 'pointer'}} onClick={()=>{this.openDetail(item.data)}}>查看详情</span>
+125                                showTotal={total=>`共${total}条`}
+E:/work/Data/UI/DigitalSim/src/pages/components/Print/index.js
+67            window.remote.dialog.showErrorBox('错误', '请先选择一个打印机！')
+94                    <Form.Item label="打印机">
+100                    {!this.state.showSave &&　<Form.Item label="份数">
+103                    <Form.Item label="布局">
+105                            <Option value="a">纵向</Option>
+106                            <Option value="b">横向</Option>
+109                    <Form.Item label="彩色">
+111                            <Option value="a">彩色</Option>
+112                            <Option value="b">黑白</Option>
+115                    <Form.Item label="尺寸">
+121                        <Button type='primary' onClick={this.handlePrintBtn}>{this.state.showSave ? "保存" : "打印" }</Button>
+E:/work/Data/UI/DigitalSim/src/pages/components/Print/PrintCom.js
+E:/work/Data/UI/DigitalSim/src/pages/components/RootPrediction/index.js
+26                <Form.Item label="名称" name={"name"} rules={[{required:true,message:'必填项！'}]} style={{marginLeft: '28px'}}>
+29                <Form.Item label="开始时间" name={"start"} rules={[{required:true,message:'必填项！'}]}>
+32                <Form.Item label="结束时间" name={"end"} rules={[{required:true,message:'必填项！'}]}> 
+35                <Form.Item label="服务器" name={"server"} rules={[{required:true,message:'必填项！'}]} style={{marginLeft: '13px'}} >
+39                            return <Option value={item.id}>{item.name || '空'}</Option>
+E:/work/Data/UI/DigitalSim/src/pages/components/RunMode/index.js
+7                运行模式
+E:/work/Data/UI/DigitalSim/src/pages/components/TabPanelMap.js
+47    return ( <div>未配置对应的页签操作</div>);
+E:/work/Data/UI/DigitalSim/src/pages/components/Trend/index.js
+41            title: '序号',
+49            title: '位号名称',
+77            title: '高限',
+84            title: '低限',
+465                            <Button disabled={isDyncDisabled} onClick={()=>{changeIsDync(false)}} title='停止' icon={<Stop width={25} height={25}/>} className={styles.controlBtn}></Button>:
+466                            <Button disabled={isDyncDisabled} onClick={()=>{changeIsDync(true)}} title='实时推送' icon={<NextPage width={25} height={25}/>} className={styles.controlBtn}></Button>
+470                        <Button onClick={()=>{bigPageSize('big')}} title='放大' icon={<ToBig width={25} height={25}/>} style={{transform: 'rotate(90deg)'}} className={styles.controlBtn}></Button>
+471                        <Button onClick={()=>{bigPageSize('small')}} title='缩小' icon={<ToSmall width={25} height={25}/>} style={{transform: 'rotate(-90deg)'}} className={styles.controlBtn}></Button>
+E:/work/Data/UI/DigitalSim/src/pages/components/YunRender/index.js
+27                    if(item.name == '跟随服务器'){
+29                    }else if(item.name == '目标DCS服务器'){
+57                        name: '跟随服务器',
+61                        name: '仿真服务器',
+65                        name: '目标服务器',
