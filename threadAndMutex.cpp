@@ -105,3 +105,11 @@ void ThreadAndMutex::AsyncThread() {
 	std::future<int> pr = m_promise.get_future();
 	std::cout << "线程执行内容" << pr.get() << std::endl;
 }
+
+//条件变量，在条件满足时被继续唤醒继续执行
+void ThreadAndMutex::ActionMutex() {
+	std::unique_lock<std::mutex> lock(m_mutex);
+	cvarMutex.wait(lock, [this] {return queue.size() > 0; });
+	int endData = queue.front();
+	std::cout << endData << std::endl;
+}
