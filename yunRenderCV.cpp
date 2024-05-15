@@ -29,7 +29,7 @@
 			writeFile << base64_image;
 			writeFile.close();
 		}*/
-		/*cv::imshow("Screenshot", screenshot);*/
+		//cv::imshow("Screenshot", screenshot);
 		cv::waitKey(0);
 		return base64_image;
 	}
@@ -83,6 +83,8 @@
 	std::string YunRenderCV::getBaseFromMat(cv::Mat data) {
 		std::vector<uchar> buffer;
 		imencode(".jpg", data, buffer);
+		//std::string encoded_str(buffer.begin(), buffer.end());
+		//std::string base64_data = base64::encode(buffer);
 		std::string base64_image = base64_encode(buffer.data(), buffer.size());
 		return base64_image;
 	}
@@ -104,5 +106,9 @@
 				}
 			}
 		}
+
+		// 使用std::replace函数替换base64字符串中的'='字符,不然在html中显示不出来
+		std::replace(base64.begin(), base64.end(), '=', 'A');
+
 		return base64;
 	}

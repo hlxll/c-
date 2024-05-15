@@ -8,6 +8,7 @@
 #include "yunRenderCV.h"
 //#pragma comment(lib, "ws2_32.lib")
 int SocketApi::createSocket() {
+	//套接字网络编程使用的是Winsock库，所以需要再开头初始化库. WSACleanup推出Winsock库
 	WSADATA wsaData;
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
 		std::cerr << "初始化 Winsock 失败" << std::endl;
@@ -143,7 +144,7 @@ int threadWork(SOCKET clientSocket) {
 		YunRenderCV yunRender;
 		std::string imageStr = yunRender.getWindow(desktopWnd);
 
-		// 合并响应头和数据
+		// 合并get响应头和数据
 		std::string fullResponse = postHTTPHead(imageStr);
 		int sentBytes = send(clientSocket, fullResponse.c_str(), fullResponse.length(), 0);
 	}
