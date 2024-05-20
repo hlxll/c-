@@ -30,7 +30,7 @@
 			writeFile.close();
 		}*/
 		//cv::imshow("Screenshot", screenshot);
-		cv::waitKey(0);
+		//cv::waitKey(0);
 		return base64_image;
 	}
 	cv::Mat YunRenderCV::CaptureWindow(HWND windowHandle) {
@@ -80,11 +80,18 @@
 	}
 
 	//Mat图片数据转base64
-	std::string YunRenderCV::getBaseFromMat(cv::Mat data) {
+	std::string YunRenderCV::getBaseFromMat(cv::Mat img) {
+		//转换格式不对，图片显示部分
 		std::vector<uchar> buffer;
-		imencode(".jpg", data, buffer);
+		imencode(".jpg", img, buffer);
 		//std::string encoded_str(buffer.begin(), buffer.end());
 		//std::string base64_data = base64::encode(buffer);
+
+		// 将编码结果转换为C字符串
+		/*char* data = new char[buffer.size() + 1];
+		memcpy(data, buffer.data(), buffer.size());
+		data[buffer.size()] = '\0';*/
+
 		std::string base64_image = base64_encode(buffer.data(), buffer.size());
 		return base64_image;
 	}

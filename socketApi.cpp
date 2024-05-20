@@ -6,6 +6,15 @@
 #include <ws2tcpip.h>
 #include <thread>
 #include "yunRenderCV.h"
+#include <mutex>
+#include <condition_variable>
+//#include <boost/algorithm/string.hpp>
+#include <map>
+//#include <boost/property_tree/json_parser.hpp>
+//#include <boost/lexical_cast.hpp>
+#include <nlohmann/json.hpp>
+#include <vector>
+#include <string>
 //#pragma comment(lib, "ws2_32.lib")
 int SocketApi::createSocket() {
 	//套接字网络编程使用的是Winsock库，所以需要再开头初始化库. WSACleanup推出Winsock库
@@ -129,6 +138,48 @@ std::string postHTTPHead(std::string imageStr) {
 std::string getHTTPHead() {
 	return "";
 }
+
+std::mutex mutextWindow;
+std::condition_variable writeBase;
+std::list<int> posiData;
+void clickWindow(std::string position) {
+	std::unique_lock<std::mutex> lock(mutextWindow);
+	//点击窗口
+	std::cout << "点击窗口" << std::endl;
+	POINT point;
+	std::string json_str = R"({"x":"12","y":"22"})";
+	nlohmann::json j = nlohmann::json::parse(json_str);
+	std::map<std::string, std::string> mapObj = j.get<std::map<std::string, std::string>>();
+	point.x = std::stol(mapObj["x"]);
+	point.y = std::stol(mapObj["y"]);
+	std::cout << mapObj["x"] << std::endl;
+	std::cout << mapObj["y"] << std::endl;
+	SetCursorPos(point.x, point.y);
+	DWORD data = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_LEFTDOWN;//双击左键
+	DWORD x = point.x;
+	DWORD y = point.y;
+	DWORD val = 0;
+	ULONG_PTR str = 0;
+	mouse_event(data, x, y, val, str);
+
+	//Sleep(2000);
+	posiData.push_back(1);
+	writeBase.notify_all();
+}
+//发送窗口截图给前端
+void sendBase(SOCKET clientSocket) {
+	std::cout << "准备获取截图" << std::endl;
+	std::unique_lock<std::mutex> lock(mutextWindow);
+	writeBase.wait(lock, []{return posiData.size() > 0; });
+	HWND desktopWnd = GetDesktopWindow();
+	YunRenderCV yunRender;
+	std::string imageStr = yunRender.getWindow(desktopWnd);
+	std::cout << "获取截图" << std::endl;
+	// 合并get响应头和数据
+	std::string fullResponse = postHTTPHead(imageStr);
+	int sentBytes = send(clientSocket, fullResponse.c_str(), fullResponse.length(), 0);
+	posiData.front();
+}
 int threadWork(SOCKET clientSocket) {
 	std::cout << "已接受客户端连接" << std::endl;
 	char buffer[1024] = "\n";
@@ -137,16 +188,26 @@ int threadWork(SOCKET clientSocket) {
 
 
 	while ((bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0)) > 0) {
-		std::cout << "接收到的数据：" << buffer << std::endl;
+		//std::cout << "接收到的数据：" << buffer << std::endl;
+		//执行点击事件
+		int x=0, y=0;
+		std::string position(buffer);
+		int index = position.find("{");
+		std::string data = position.substr(index, position.size() - index);
 
+		/*Json::Reader read;
+		Json::Value value;
+		read.parse(data, value);*/
+		/*const char* json_str = R"({"x":"12", "y":"22"})";
+		rapidjson::Document document;
+		const rapidjson::Value& x = document.Parse(json_str);*/
 
-		HWND desktopWnd = GetDesktopWindow();
-		YunRenderCV yunRender;
-		std::string imageStr = yunRender.getWindow(desktopWnd);
-
-		// 合并get响应头和数据
-		std::string fullResponse = postHTTPHead(imageStr);
-		int sentBytes = send(clientSocket, fullResponse.c_str(), fullResponse.length(), 0);
+		std::cout << data << std::endl;
+		//使用条件变量，点击操作之后，才进行截图
+		std::thread t1(clickWindow, data);
+		std::thread t2(sendBase, clientSocket);
+		t1.join();
+		t2.join();
 	}
 
 	if (bytesRead == 0) {
@@ -190,6 +251,7 @@ int SocketApi::createThreadSocket() {
 	serverAddress.sin_family = AF_INET;
 	serverAddress.sin_addr.s_addr = INADDR_ANY;
 	serverAddress.sin_port = htons(8810);
+	//reinterpret_cast数据类型转换
 	if (bind(socketServer, reinterpret_cast<sockaddr*>(&serverAddress), sizeof(serverAddress)) == SOCKET_ERROR) {
 		std::cerr << "绑定错误" << WSAGetLastError() << std::endl;
 		closesocket(socketServer);
