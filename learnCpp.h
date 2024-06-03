@@ -19,6 +19,6 @@ public:
 };
 //class Child final:public learnCpp {
 //public:
-//	//void Test() final;//不能被重写，应为虚函数定义了final
+//	//void Test() final;//不能被重写，因为虚函数定义了final
 //	void Change() override;//override表面明确要重写基类的虚函数，和基类函数有相同签名
 //};
