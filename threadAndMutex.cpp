@@ -56,6 +56,7 @@ void ThreadAndMutex::changeNum() {
 
 //写数据
 void ThreadAndMutex::putData(int x) {
+	std::cout << "putData函数";
 	std::unique_lock<std::mutex> locker(condiMutex);
 	while (queue.size() == m_maxSize) {
 		m_write.wait(locker);//写数据加锁
@@ -66,6 +67,8 @@ void ThreadAndMutex::putData(int x) {
 	});*/
 	std::cout << "写入值=" << x << std::endl;
 	queue.push_back(x);
+
+	cvarMutex.notify_all();
 	m_read.notify_one();//通知读取数据解锁
 }
 void ThreadAndMutex::readData() {
@@ -97,19 +100,50 @@ void ThreadAndMutex::readWriteData() {
 void doSomething(std::promise<int> &p){
 	int result = 4;
 	p.set_value(result);
+	std::cout << std::this_thread::get_id() << std::endl;
+
 }
-//异步线程
+//异步线程,可以和线程通信，还是异步执行任务。
 void ThreadAndMutex::AsyncThread() {
+	
 	std::thread t(doSomething, std::ref(m_promise));
 	t.detach();
 	std::future<int> pr = m_promise.get_future();
 	std::cout << "线程执行内容" << pr.get() << std::endl;
+	std::cout << std::this_thread::get_id() << std::endl;
+
+	//在package方法中可以不需要设置value，返回值就是外面future获取的值
+	std::packaged_task<int(int)> task([](int x) {
+		std::cout << "package线程" << std::this_thread::get_id() << std::endl;
+		return x += 100;
+	});
+	std::thread t2(std::ref(task), 100);
+	std::future<int> f = task.get_future();
+	std::cout << "package线程信息" << f.get() << std::endl;
+	t2.join();
+
 }
 
 //条件变量，在条件满足时被继续唤醒继续执行
 void ThreadAndMutex::ActionMutex() {
+	std::cout << "actionMutex 函数";
 	std::unique_lock<std::mutex> lock(m_mutex);
+	//这种自动获取是否阻塞，还是需要其他线程使用notify_all或notify_one通知
 	cvarMutex.wait(lock, [this] {return queue.size() > 0; });
 	int endData = queue.front();
 	std::cout << endData << std::endl;
+
+}
+
+//消息队列
+void ThreadAndMutex::PushMsgQueue(std::string param) {
+	std::unique_lock<std::mutex> lock(queMsgLock);
+	queueMsg.push(param);
+	queueVariable.notify_all();
+}
+void ThreadAndMutex::WaitMsgQueue() {
+	std::unique_lock<std::mutex> lock(queMsgLock);
+	queueVariable.wait(lock, [this] {return queueMsg.size() > 0; });
+	std::string param = queueMsg.front();
+	queueMsg.pop();
 }

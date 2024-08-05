@@ -5,6 +5,8 @@
 #include <mutex>
 #include <future>
 #include <condition_variable>
+#include <queue>
+#include <string>
 class ThreadAndMutex
 {
 public:
@@ -17,6 +19,10 @@ public:
 	void AsyncThread();
 	void ActionMutex();
 
+	//消息队列
+	void PushMsgQueue(std::string param);
+	void WaitMsgQueue();
+
 	std::mutex m_mutex;
 	std::recursive_mutex rec_mutex;
 
@@ -26,6 +32,11 @@ public:
 	std::mutex condiMutex;
 	std::promise<int> m_promise;
 	std::condition_variable cvarMutex;
+
+	//消息队列
+	std::queue<std::string> queueMsg;
+	std::mutex queMsgLock;
+	std::condition_variable queueVariable;
 private:
 	int num = 0;
 	int m_maxSize = 5;
