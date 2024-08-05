@@ -145,5 +145,6 @@ void ThreadAndMutex::WaitMsgQueue() {
 	std::unique_lock<std::mutex> lock(queMsgLock);
 	queueVariable.wait(lock, [this] {return queueMsg.size() > 0; });
 	std::string param = queueMsg.front();
+	std::cout << param << std::endl;
 	queueMsg.pop();
 }

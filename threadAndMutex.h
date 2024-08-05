@@ -7,6 +7,7 @@
 #include <condition_variable>
 #include <queue>
 #include <string>
+#include <cstring>
 class ThreadAndMutex
 {
 public:
@@ -22,7 +23,26 @@ public:
 	//消息队列
 	void PushMsgQueue(std::string param);
 	void WaitMsgQueue();
+	void readMsgQueue() {
+		ThreadAndMutex threadMsg;
+		auto producer = [&threadMsg]() {
+			for (int i = 0; i < 10; i++) {
+				std::this_thread::sleep_for(std::chrono::milliseconds(100));
+				std::cout << "production" << i << std::endl;
+				threadMsg.PushMsgQueue(std::to_string(i));
+			}
+		};
+		auto consumer = [&threadMsg]() {
+			for (int i = 0; i < 10; i++) {
+				threadMsg.WaitMsgQueue();
+			}
+		};
+		std::thread t1(producer);
+		std::thread t2(consumer);
 
+		t1.join();
+		t2.join();
+	}
 	std::mutex m_mutex;
 	std::recursive_mutex rec_mutex;
 
